@@ -2,44 +2,39 @@
   "profiles": [
     {
       "name": "main",
-      "commands": [
-        {
-          "value": "ship",
-          "execute": [
-            "git pull -r",
-            "npm test",
-            "git push"
-          ],
-          "help": {
-            "description": "🚢 pull test and push the code"
+        "commands": [
+          {
+            "name": "init",
+            "execute": [
+              "echo '# ${name}' > README.md",
+              "echo '${description}' >> README.md",
+              "node lib/init.js name='${name}' description='${description}' command='${command}' keywords='${keywords}'",
+              "rm lib/init.js",
+              "mv aux4.json .aux4"
+            ],
+            "help": {
+              "text": "Initialize the project",
+              "variables": [
+                {
+                  "name": "name",
+                  "text": "The name of the project"
+                },
+                {
+                  "name": "description",
+                  "text": "The description of the project"
+                },
+                {
+                  "name": "command",
+                  "text": "The CLI command to execute"
+                },
+                {
+                  "name": "keywords",
+                  "text": "Keywords comma separated"
+                }
+              ]
+            }
           }
-        },
-        {
-          "value": "release",
-          "execute": [
-            "npm version ${version}",
-            "json:cat package.json",
-            "set:versionNumber=${response.version}",
-            "npm publish --access public --otp=${otp}",
-            "git push --follow-tags",
-            "echo ${versionNumber} released successfully"
-          ],
-          "help": {
-            "description": "release new version of @aux4/template",
-            "variables": [
-              {
-                "name": "version",
-                "text": "type of version release. e.g.: major, minor, patch",
-                "default": "patch"
-              },
-              {
-                "name": "otp",
-                "text": "npm one time password"
-              }
-            ]
-          }
-        }
-      ]
+        ]
     }
   ]
 }
