@@ -8,7 +8,7 @@
             "execute": [
               "echo '# ${name}' > README.md",
               "echo '${description}' >> README.md",
-              "node lib/init.js name='${name}' description='${description}' command='${command}' keywords='${keywords}'",
+              "node lib/init.js name='${name}' description='${description}' command='${executor}' keywords='${keywords}'",
               "rm lib/init.js",
               "mv aux4.json .aux4"
             ],
@@ -24,7 +24,7 @@
                   "text": "The description of the project"
                 },
                 {
-                  "name": "command",
+                  "name": "executor",
                   "text": "The CLI command to execute"
                 },
                 {
