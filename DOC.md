@@ -1,6 +1,8 @@
 # @aux4/<name>
 <description>
 
+![npm](https://img.shields.io/npm/v/@aux4/<name>)
+
 ## Install
 
 ```bash
