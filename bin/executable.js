@@ -2,6 +2,8 @@
 
 const { Engine } = require("@aux4/engine");
 
+process.title = "aux4-template";
+
 const config = {
   profiles: [
     {
@@ -11,7 +13,7 @@ const config = {
           name: "",
           execute: [],
           help: {
-            text: "",
+            text: ""
           }
         }
       ]
