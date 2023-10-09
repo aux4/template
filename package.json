@@ -8,7 +8,7 @@
     "aux4-": "bin/executable.js"
   },
   "scripts": {
-    "test": "jest"
+    "test": "aux4-test run"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,6 @@
     "@aux4/input": "^0.0.3"
   },
   "devDependencies": {
-    "jest": "^29.7.0"
+    "@aux4/test": "^0.0.18"
   }
 }

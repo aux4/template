@@ -17,6 +17,8 @@
         {
           "name": "release",
           "execute": [
+            "git pull -r",
+            "npm test",
             "npm version ${version}",
             "json:cat package.json",
             "set:versionNumber=${response.version}",
