@@ -15,10 +15,22 @@
           }
         },
         {
+          "value": "test-summary",
+          "execute": [
+            "echo '# Test Summary\n' > test/README.md",
+            "cd test && ls *.test.md | xargs -I {} sh -c 'echo \"* [$(head -n 1 {} | cut -c3-)]({})\" >> README.md'"
+          ],
+          "help": {
+            "description": "generate test summary"
+          }
+        },
+        {
           "name": "release",
           "execute": [
             "git pull -r",
             "npm test",
+            "aux4 test-summary",
+            "git diff --quiet && git diff --staged --quiet || git commit -am 'Update test summary'",
             "npm version ${version}",
             "json:cat package.json",
             "set:versionNumber=${response.version}",

@@ -8,7 +8,8 @@
     "aux4-": "bin/executable.js"
   },
   "scripts": {
-    "test": "aux4-test run"
+    "test": "aux4-test run",
+    "coverage": "aux4-test coverage"
   },
   "repository": {
     "type": "git",
