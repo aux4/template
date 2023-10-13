@@ -44,7 +44,12 @@
               {
                 "name": "version",
                 "text": "type of version release. e.g.: major, minor, patch",
-                "default": "patch"
+                "default": "patch",
+                "options": [
+                  "major",
+                  "minor",
+                  "patch"
+                ]
               },
               {
                 "name": "otp",
