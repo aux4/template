@@ -1,0 +1,54 @@
+{
+  "scope": "aux4",
+  "name": "template",
+  "version": "0.0.1",
+  "description": "Render Handlebars templates from the command line using aux4 parameters",
+  "license": "Apache-2.0",
+  "git": "https://github.com/aux4/template",
+  "tags": [
+    "aux4",
+    "template",
+    "handlebars",
+    "render",
+    "scaffold"
+  ],
+  "system": [
+    [
+      "test:node --version",
+      "brew:node",
+      "linux:nodejs"
+    ]
+  ],
+  "profiles": [
+    {
+      "name": "main",
+      "commands": [
+        {
+          "name": "template",
+          "execute": [
+            "stdin:node ${packageDir}/lib/aux4-template.mjs render values(file, data, output) value(*)"
+          ],
+          "help": {
+            "text": "Render a Handlebars template file using the provided parameters.",
+            "variables": [
+              {
+                "name": "file",
+                "text": "Path to the Handlebars template file to render."
+              },
+              {
+                "name": "data",
+                "text": "Path to a JSON file providing the base template context.",
+                "default": ""
+              },
+              {
+                "name": "output",
+                "text": "Write the rendered result to this file instead of standard output.",
+                "default": ""
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

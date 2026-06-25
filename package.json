@@ -1,0 +1,28 @@
+{
+  "name": "@aux4/template",
+  "version": "0.0.1",
+  "description": "Render Handlebars templates from the command line using aux4 parameters",
+  "type": "module",
+  "preferGlobal": true,
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [
+    "aux4",
+    "cli",
+    "template",
+    "handlebars",
+    "render"
+  ],
+  "author": "aux4 LLC",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "rollup": "^4.46.3"
+  }
+}

@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+package/lib
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local testing
+local-test
+*.zip
+
+# OS
+.DS_Store
+
+# IDE
+.idea
