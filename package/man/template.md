@@ -12,18 +12,19 @@ Type helpers are provided to interpret string flag values: `bool` (interpret as 
 
 The context can be supplied from three sources, applied lowest to highest precedence: a `--data` JSON file (base/defaults), a JSON record read from standard input, and `--key value` flags (explicit overrides applied to every render). A flag therefore always wins over the same field from `--data` or a stream record.
 
-When JSON is piped on standard input, the template is rendered once per record. Newline-delimited JSON (one object per line) and a single top-level JSON array are both accepted, and an invalid record stops processing with a non-zero exit code. With `--output`, the rendered result is written to a file (overwriting it) instead of standard output.
+Standard input is read only when `--inputStream true` is passed: the template is then rendered once per JSON record from stdin. Newline-delimited JSON (one object per line) and a single top-level JSON array are both accepted, and an invalid record stops processing with a non-zero exit code. Without `--inputStream`, stdin is never touched, so plain `--key value` rendering is safe to use inside a pipeline. With `--output`, the rendered result is written to a file (overwriting it) instead of standard output.
 
 #### Usage
 
 ```bash
-aux4 template --file <path> [--data <file>] [--output <file>] [--key value ...]
+aux4 template --file <path> [--data <file>] [--output <file>] [--inputStream true] [--key value ...]
 ```
 
---file    Path to the Handlebars template file to render (required).
---data    A JSON file (single object) used as the base template context.
---output  Write the rendered result to this file instead of standard output.
---key     Any additional flag becomes a template variable. JSON arrays and objects are parsed automatically.
+--file         Path to the Handlebars template file to render (required).
+--data         A JSON file (single object) used as the base template context.
+--output       Write the rendered result to this file instead of standard output.
+--inputStream  Read JSON records from stdin and render once per record (default: false).
+--key          Any additional flag becomes a template variable. JSON arrays and objects are parsed automatically.
 
 #### Example
 
@@ -54,7 +55,7 @@ David 40
 Rendering one result per record from a JSON stream:
 
 ```bash
-printf '{"name":"Ada","age":36}\n{"name":"Linus","age":54}\n' | aux4 template --file row.hbs
+printf '{"name":"Ada","age":36}\n{"name":"Linus","age":54}\n' | aux4 template --file row.hbs --inputStream true
 ```
 
 ```text

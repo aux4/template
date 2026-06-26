@@ -42,6 +42,7 @@ Every `--key value` flag you pass becomes a variable available in the template. 
 - `--file` — Path to the Handlebars template file to render (required).
 - `--data <file>` — A JSON file (a single object) used as the base template context.
 - `--output <file>` — Write the rendered result to this file instead of standard output.
+- `--inputStream true` — Read JSON records from standard input and render the template once per record (see streaming below).
 - Any other `--key value` flag becomes a template variable.
 
 ### Context sources and precedence
@@ -49,7 +50,7 @@ Every `--key value` flag you pass becomes a variable available in the template. 
 The template context can come from three places, applied lowest to highest precedence:
 
 1. `--data <file>` — base/default fields from a JSON object.
-2. A JSON record read from standard input (see streaming below).
+2. A JSON record read from standard input (with `--inputStream true`; see streaming below).
 3. `--key value` flags — explicit overrides applied to every render.
 
 So a flag always wins over a value from `--data` or a stream record. For example, with `person.json` containing `{"name":"David","age":30}`:
@@ -66,7 +67,7 @@ The `age` flag overrides the `age` from the data file, while `name` comes from t
 
 ### Streaming JSON records on standard input
 
-When JSON is piped on standard input, the template is rendered once per record and each result is written in order. Both newline-delimited JSON (one object per line) and a single top-level JSON array are accepted:
+Standard input is only read when you pass `--inputStream true`. With it, the template is rendered once per JSON record read from stdin, and each result is written in order. Both newline-delimited JSON (one object per line) and a single top-level JSON array are accepted:
 
 Template `row.hbs`:
 
@@ -75,7 +76,7 @@ Template `row.hbs`:
 ```
 
 ```bash
-printf '{"name":"Ada","age":36}\n{"name":"Linus","age":54}\n' | aux4 template --file row.hbs
+printf '{"name":"Ada","age":36}\n{"name":"Linus","age":54}\n' | aux4 template --file row.hbs --inputStream true
 ```
 
 ```text
@@ -85,12 +86,14 @@ Linus is 54
 
 Flags still apply to every record, so `--age 99` would force that value across the whole stream, and `--data` supplies shared defaults. An invalid record stops processing with a non-zero exit code.
 
+Because stdin is read only with `--inputStream true`, plain `--key value` rendering never touches standard input — so it is safe to use inside a pipeline (for example a `... | while read` loop) without redirecting `< /dev/null`.
+
 ### Writing to a file
 
 With `--output <file>`, nothing is written to standard output; the rendered result (including every record of a stream, in order) goes to the file. The file is overwritten each run, mirroring a `> file` redirect — to accumulate across runs, omit `--output` and use the shell:
 
 ```bash
-cat records.ndjson | aux4 template --file row.hbs >> all.txt
+cat records.ndjson | aux4 template --file row.hbs --inputStream true >> all.txt
 ```
 
 ### Arrays and objects

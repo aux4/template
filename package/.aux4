@@ -9,8 +9,7 @@
     "aux4",
     "template",
     "handlebars",
-    "render",
-    "scaffold"
+    "render"
   ],
   "system": [
     [
@@ -26,7 +25,7 @@
         {
           "name": "template",
           "execute": [
-            "stdin:node ${packageDir}/lib/aux4-template.mjs render values(file, data, output) value(*)"
+            "stdin:node ${packageDir}/lib/aux4-template.mjs render values(file, data, output, inputStream) value(*)"
           ],
           "help": {
             "text": "Render a Handlebars template file using the provided parameters.",
@@ -44,6 +43,11 @@
                 "name": "output",
                 "text": "Write the rendered result to this file instead of standard output.",
                 "default": ""
+              },
+              {
+                "name": "inputStream",
+                "text": "Read JSON records from stdin and render the template once per record.",
+                "default": "false"
               }
             ]
           }

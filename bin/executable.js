@@ -5,16 +5,19 @@ import readline from "readline";
 import { execFileSync } from "child_process";
 import Handlebars from "handlebars";
 
-// Reserved control flags + aux4-injected variables. None of these become part
-// of the template context; everything else passed as --key value does.
+// Keys that must not become template variables. These are this command's own
+// control flags, plus the variables aux4 itself injects into value(*):
+//   - packageDir, aux4HomeDir, configDir : always injected by aux4
+//   - config, configFile                 : present when the config integration is used
+//   - response                           : set by aux4 from a previous execute line
 const RESERVED = new Set([
   "file",
   "data",
   "output",
+  "inputStream",
   "response",
   "packageDir",
   "aux4HomeDir",
-  "aux4ConfigDir",
   "configDir",
   "config",
   "configFile"
@@ -200,7 +203,8 @@ function main() {
   const file = args[1];
   const dataPath = args[2] || "";
   const outputPath = args[3] || "";
-  const allParamsJson = args[4] || "{}";
+  const inputStream = args[4] || "";
+  const allParamsJson = args[5] || "{}";
 
   if (!file) {
     fail("No template file provided. Use --file <path>.", 3);
@@ -274,8 +278,10 @@ function main() {
     }
   };
 
-  // No piped stdin: render once from --data + flags.
-  if (process.stdin.isTTY) {
+  // Stdin is only consumed when --inputStream is enabled. Otherwise render once
+  // from --data + flags and never touch stdin, so flag-only use is safe even
+  // inside a pipeline (e.g. a `... | while read` loop).
+  if (!toBool(inputStream)) {
     renderRecord({});
     finish();
     return;
